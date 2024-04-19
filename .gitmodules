@@ -1,3 +1,6 @@
 [submodule "VIPS_co_visible_object_matching"]
 	path = VIPS_co_visible_object_matching
 	url = https://github.com/btn6364/VIPS_co_visible_object_matching
+[submodule "mmdetection3d"]
+	path = mmdetection3d
+	url = https://github.com/open-mmlab/mmdetection3d
