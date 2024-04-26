@@ -41,6 +41,7 @@ def convertAll():
         pcd_to_bin(f, "infra")
 
 if __name__=="__main__": 
+    # TODO: Always run python main/pcd_to_bin.py. Otherwise, it won't work. 
     convertAll()
     # num_infra_pcds = len(os.listdir("evaluation/Infrastructure"))
     # num_infra_bins = len(os.listdir("evaluation/infra_bin"))
