@@ -1,10 +1,12 @@
 import os
 import subprocess 
+import time
 
-def runPointpillarsOnePointCloud(input, dataset, subdataset, prefix): 
+def runPointpillarsOnePointCloud(input, prefix): 
     config = "../mmdetection3d/configs/pointpillars/pointpillars_hv_secfpn_8xb6-160e_kitti-3d-3class.py"
     checkpoint = "../mmdetection3d/checkpoints/hv_pointpillars_secfpn_6x8_160e_kitti-3d-3class_20220301_150306-37dc2420.pth"
-    output_directory = f"../mmdetection3d/outputs/carla/{dataset}/{subdataset}/{prefix}"
+    # output_directory = f"../mmdetection3d/outputs/carla/{dataset}/{subdataset}/{prefix}"
+    output_directory = f"../mmdetection3d/outputs/test/{prefix}"
     demo_file = "../mmdetection3d/demo/pcd_demo.py" 
     command = ["python", demo_file, input, config, checkpoint, "--out-dir", output_directory]
 
@@ -19,23 +21,31 @@ def runPointpillarsOnePointCloud(input, dataset, subdataset, prefix):
 
 def runPointpillarsAll():
     # datasets = ["Dataset_1", "Dataset_2", "Dataset_3"]
-    datasets = ["Dataset_1"]
+    # datasets = ["Dataset_1"]
     # subdatasets = ["D1", "D2", "D3", "D4", "D5"]
-    subdatasets = ["D1"]
-    for dataset in datasets:
-        for subdataset in subdatasets:
-            vehicle_bin_dir = f"../datasets/carla/{dataset}/{subdataset}/vehicle_bin/"
-            infra_bin_dir = f"../datasets/carla/{dataset}/{subdataset}/infra_bin/"
+    # subdatasets = ["D1"]
+    # Start a timer
+    start_time = time.time()
 
-            # Iterate over files in Vehicle_BIN
-            for filename in os.listdir(vehicle_bin_dir):
-                f = os.path.join(vehicle_bin_dir, filename)
-                runPointpillarsOnePointCloud(f, dataset, subdataset, "vehicle")
-            
-            # Iterate over files in Infra_BIN
-            for filename in os.listdir(infra_bin_dir):
-                f = os.path.join(infra_bin_dir, filename)
-                runPointpillarsOnePointCloud(f, dataset, subdataset, "infra")
+    vehicle_bin_dir = f"../evaluation/vehicle_bin/"
+    infra_bin_dir = f"../evaluation/infra_bin/"
+
+    # Iterate over files in Vehicle_BIN
+    for filename in os.listdir(vehicle_bin_dir):
+        f = os.path.join(vehicle_bin_dir, filename)
+        runPointpillarsOnePointCloud(f, "vehicle")
+    
+    # Iterate over files in Infra_BIN
+    for filename in os.listdir(infra_bin_dir):
+        f = os.path.join(infra_bin_dir, filename)
+        runPointpillarsOnePointCloud(f, "infra")
+
+    # End the timer 
+    end_time = time.time()
+
+    # Calculate elapsed time 
+    elapsed_time = round(end_time - start_time, 2) 
+    print(f"Latency for 3D object detection = {elapsed_time}")
 
 if __name__=="__main__": 
     runPointpillarsAll()
