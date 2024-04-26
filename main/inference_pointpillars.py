@@ -5,7 +5,6 @@ import time
 def runPointpillarsOnePointCloud(input, prefix): 
     config = "../mmdetection3d/configs/pointpillars/pointpillars_hv_secfpn_8xb6-160e_kitti-3d-3class.py"
     checkpoint = "../mmdetection3d/checkpoints/hv_pointpillars_secfpn_6x8_160e_kitti-3d-3class_20220301_150306-37dc2420.pth"
-    # output_directory = f"../mmdetection3d/outputs/carla/{dataset}/{subdataset}/{prefix}"
     output_directory = f"../mmdetection3d/outputs/test/{prefix}"
     demo_file = "../mmdetection3d/demo/pcd_demo.py" 
     command = ["python", demo_file, input, config, checkpoint, "--out-dir", output_directory]
@@ -20,10 +19,6 @@ def runPointpillarsOnePointCloud(input, prefix):
     
 
 def runPointpillarsAll():
-    # datasets = ["Dataset_1", "Dataset_2", "Dataset_3"]
-    # datasets = ["Dataset_1"]
-    # subdatasets = ["D1", "D2", "D3", "D4", "D5"]
-    # subdatasets = ["D1"]
     # Start a timer
     start_time = time.time()
 
