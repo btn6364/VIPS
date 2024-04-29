@@ -3,6 +3,7 @@ from pypcd4 import PointCloud
 import open3d as o3d
 import os 
 
+# Convert a .pcd file to a .bin file
 def pcd_to_bin(pcd_file, tag):
     # Read the PCD file
     pcd = o3d.t.io.read_point_cloud(pcd_file)
@@ -10,19 +11,19 @@ def pcd_to_bin(pcd_file, tag):
     # Get the positions and intensities
     positions = pcd.point.positions
 
-    # Copy to a numpy array
-    points = np.zeros([positions.shape[0], 6], dtype=np.float32)
+    # Copy the position of the point cloud to the binary point cloud
+    points = np.zeros([positions.shape[0], 4], dtype=np.float32)
     points[:, 0] = positions[:, 0].numpy()
     points[:, 1] = positions[:, 1].numpy()
     points[:, 2] = positions[:, 2].numpy()
 
-    # Copy intensities
+    # Save the intensities if the point cloud have intensities
     # intensities_copy = pcd.point.intensities.numpy().astype(np.float32).reshape((positions.shape[0],))
 
     # Copy object_tag, cosAngle and object_id 
-    points[:, 3] = pcd.point.object_tag.numpy().astype(np.float32).reshape((positions.shape[0],))
-    points[:, 4] = pcd.point.cosAngle.numpy().astype(np.float32).reshape((positions.shape[0],))
-    points[:, 5] = pcd.point.object_id.numpy().astype(np.float32).reshape((positions.shape[0],))
+    # points[:, 3] = pcd.point.object_tag.numpy().astype(np.float32).reshape((positions.shape[0],))
+    # points[:, 4] = pcd.point.cosAngle.numpy().astype(np.float32).reshape((positions.shape[0],))
+    # points[:, 5] = pcd.point.object_id.numpy().astype(np.float32).reshape((positions.shape[0],))
 
     # Save the binary point cloud
     file_name = pcd_file.split("/")[-1][:-4]
@@ -31,6 +32,7 @@ def pcd_to_bin(pcd_file, tag):
     with open(dest_file, "wb") as f:
         f.write(points.tobytes())
 
+# Convert all .pcd files to .bin files
 def convertAll():
     vehicle_pcd_dir = "../Segmentation_Dataset/Vehicle"
     infra_pcd_dir = "../Segmentation_Dataset/Infrastructure"
@@ -47,6 +49,7 @@ def convertAll():
 
 if __name__=="__main__": 
     # pcd_to_bin("../Segmentation_Dataset/Vehicle/0.pcd", "vehicle")
+    # Convert all pcd point clouds into binary format (KITTI) to run PointPillars. 
     convertAll()
     num_infra_pcds = len(os.listdir("../Segmentation_Dataset/Infrastructure"))
     num_infra_bins = len(os.listdir("../Segmentation_Dataset/infra_bin"))
